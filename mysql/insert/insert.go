@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-func InsertMessageToBans(db *sql.DB, userName string, cause string, Date_Ban string, PhotoProfil string, nomTable string) {
-	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Cause`, `Date_Bannissement`, `PhotoProfil`) VALUES (?,?,?,?)", nomTable)
+func InsertMessageToBans(db *sql.DB, userName, cause, Date_Ban, PhotoProfil, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Cause`, `Date_Bannissement`, `PhotoProfil`) VALUES (?,?,?,?)", nameTable)
 
 	// Préparation de la requête
 	stmt, err := db.Prepare(query)
@@ -25,8 +25,8 @@ func InsertMessageToBans(db *sql.DB, userName string, cause string, Date_Ban str
 	}
 }
 
-func InsertMessageToGameForum(db *sql.DB, userName string, message string, image string, Date string, nomTable string) {
-	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Message`, `Image`, `Date`) VALUES (?,?,?,?)", nomTable)
+func InsertMessageToGameForum(db *sql.DB, userName, message, image, Date, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Message`, `Image`, `Date`) VALUES (?,?,?,?)", nameTable)
 
 	// Préparation de la requête
 	stmt, err := db.Prepare(query)
@@ -40,12 +40,12 @@ func InsertMessageToGameForum(db *sql.DB, userName string, message string, image
 	if err != nil {
 		log.Fatalf("Erreur lors de l'insertion de la conv: %v", err)
 	} else {
-		fmt.Println("la conv à été insérer avec succès dans Game")
+		fmt.Println("la conv à été insérer avec succès dans le Forum")
 	}
 }
 
-func InsertProfilToProfil(db *sql.DB, userName string, firstname string, lastname string, age string, Email string, image string, descriptions string, nomTable string) {
-	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Prenom`, `Nom`, `Age`, `Email`,`PhotoProfil` ,`Description` ) VALUES (?,?,?,?,?,?,?)", nomTable)
+func InsertProfilToProfil(db *sql.DB, userName, firstname, lastname, age, Email, image, descriptions, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`Prenom`, `Nom`, `Age`, `Email`,`PhotoProfil` ,`Description` ) VALUES (?,?,?,?,?,?,?)", nameTable)
 
 	// Préparation de la requête
 	stmt, err := db.Prepare(query)
@@ -63,8 +63,8 @@ func InsertProfilToProfil(db *sql.DB, userName string, firstname string, lastnam
 	}
 }
 
-func InsertUserToUser(db *sql.DB, userName string, passUser string, nomTable string) {
-	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`, `MotDePasse`, `Role`) VALUES (?,?,?)", nomTable)
+func InsertUserToUser(db *sql.DB, userName, passUser, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`, `MotDePasse`, `Role`) VALUES (?,?,?)", nameTable)
 
 	// Préparation de la requête
 	stmt, err := db.Prepare(query)
@@ -79,5 +79,42 @@ func InsertUserToUser(db *sql.DB, userName string, passUser string, nomTable str
 		log.Fatalf("Erreur lors de l'insertion de l'utilisateur: %v", err)
 	} else {
 		fmt.Println("Utilisateur inséré avec succès.")
+	}
+}
+
+func InsertGameToGame(db *sql.DB, nameGame, imageGame, Description, Types, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`NomJeu`,`ImageJeu`, `Description`, `Types`) VALUES (?,?,?,?)", nameTable)
+
+	// Préparation de la requête
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		log.Fatalf("Erreur lors de la préparation de la requête: %v", err)
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(nameGame, imageGame, Description, Types)
+	if err != nil {
+		log.Fatalf("Erreur lors de l'insertion dans les jeux: %v", err)
+	} else {
+		fmt.Println("le jeu à été insérer avec succès dans les jeux")
+	}
+}
+func InsertUserToBans(db *sql.DB, userName, Password, cause, DateBan, PhotoProfil, nameTable string) {
+	query := fmt.Sprintf("INSERT INTO `%s` (`Utilisateur`,`MotDePasse`, `Cause`, `Date_Bannissement`, `PhotoProfil`) VALUES (?,?,?,?,?)", nameTable)
+
+	// Préparation de la requête
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		log.Fatalf("Erreur lors de la préparation de la requête: %v", err)
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userName, Password, cause, DateBan, PhotoProfil)
+	if err != nil {
+		log.Fatalf("Erreur lors de l'insertion dans les jeux: %v", err)
+	} else {
+		fmt.Println("le jeu à été insérer avec succès dans les jeux")
 	}
 }

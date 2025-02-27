@@ -2,6 +2,7 @@ package CreateAndDelete
 
 import (
 	"database/sql"
+	structures "fauxrome/server/Structures"
 	"fmt"
 	"log"
 )
@@ -25,23 +26,27 @@ func CreateTable(db *sql.DB, query string, nameTable string) {
 	if err != nil {
 		log.Printf("Erreur lors de la création de la table: %v", err)
 	} else {
-		fmt.Println("Table " + nameTable + "créée ou déjà existante.")
+		fmt.Println("Table " + nameTable + " crée ou déjà existante.")
 	}
 }
 
 // ---------------------------------------------------------
 
-func CreateAllTables(db *sql.DB, nameTableUser string, nameTableProfil string, nameTableGame string, nameTableBans string) {
-	CreateTableUser(db, nameTableUser)
-	CreateTableProfil(db, nameTableProfil)
-	CreateTableGame(db, nameTableGame)
-	CreateTableBans(db, nameTableBans)
+func CreateAllTables(db *sql.DB) {
+	fmt.Println("----------------------------------------------------")
+	CreateTableUser(db, structures.Tbl.User)
+	CreateTableProfil(db, structures.Tbl.Profil)
+	CreateTableForum(db, structures.Tbl.Forum)
+	CreateTableGame(db, structures.Tbl.Game)
+	CreateTableBans(db, structures.Tbl.Bans)
+	fmt.Println("----------------------------------------------------")
 }
 
 func CreateTableBans(db *sql.DB, nameTable string) {
 	query := "CREATE TABLE IF NOT EXISTS `" + nameTable + "` (" +
 		"`ID` INT NOT NULL AUTO_INCREMENT, " +
 		"`Utilisateur` VARCHAR(100) NOT NULL, " +
+		"`MotDePasse` VARCHAR(100) NOT NULL, " +
 		"`Cause` TEXT NOT NULL, " +
 		"`Date_Bannissement` VARCHAR(100) DEFAULT NULL, " +
 		"`PhotoProfil` VARCHAR(100) NOT NULL, " +
@@ -49,7 +54,7 @@ func CreateTableBans(db *sql.DB, nameTable string) {
 	CreateTable(db, query, nameTable)
 }
 
-func CreateTableGame(db *sql.DB, nameTable string) {
+func CreateTableForum(db *sql.DB, nameTable string) {
 	query := "CREATE TABLE IF NOT EXISTS `" + nameTable + "` (" +
 		"`ID` INT NOT NULL AUTO_INCREMENT, " +
 		"`Utilisateur` VARCHAR(100) NOT NULL, " +
@@ -69,7 +74,7 @@ func CreateTableProfil(db *sql.DB, nameTable string) {
 		"`Age` VARCHAR(3) NOT NULL, " +
 		"`Email` VARCHAR(100) NOT NULL, " +
 		"`PhotoProfil` VARCHAR(255) NOT NULL, " +
-		"`Description` TEXT not NULL, " +
+		"`Description` TEXT NOT NULL, " +
 		"PRIMARY KEY (`ID`));"
 	CreateTable(db, query, nameTable)
 }
@@ -80,6 +85,17 @@ func CreateTableUser(db *sql.DB, nameTable string) {
 		"`Utilisateur` VARCHAR(100) NOT NULL, " +
 		"`MotDePasse` VARCHAR(100) NOT NULL, " +
 		"`Role` VARCHAR(5) NOT NULL DEFAULT 'USER', " +
+		"PRIMARY KEY (`ID`));"
+	CreateTable(db, query, nameTable)
+}
+
+func CreateTableGame(db *sql.DB, nameTable string) {
+	query := "CREATE TABLE IF NOT EXISTS `" + nameTable + "` (" +
+		"`ID` INT NOT NULL AUTO_INCREMENT, " +
+		"`NomJeu` VARCHAR(100) NOT NULL, " +
+		"`ImageJeu` VARCHAR(100) NOT NULL, " +
+		"`Description` TEXT NOT NULL, " +
+		"`Types` VARCHAR(200) NOT NULL, " +
 		"PRIMARY KEY (`ID`));"
 	CreateTable(db, query, nameTable)
 }

@@ -3,6 +3,7 @@ package server
 import (
 	"database/sql"
 
+	"fauxrome/mysql/ConnectAndDisconnect"
 	"fauxrome/mysql/insert"
 	SearchIntoTables "fauxrome/mysql/search"
 	structures "fauxrome/server/Structures"
@@ -18,7 +19,7 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 	templatePath := structures.Role_ConnectedUser + "forum"
 	fmt.Println("Le rôle templatepath forum:", structures.Role_ConnectedUser)
 
-	db := MysqlConf()
+	db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 	nameTableGame := "GameLeagueOfLegends"
 	username := structures.User_Connected
 	structures.Conversation_game_var.Utilisateur_Connected = username
@@ -46,7 +47,6 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 		AfficherTemplate(w, templatePath, structures.Slice_Convs)
 
 	} else {
-		db := MysqlConf()
 		displayForumMessages(db)
 		AfficherTemplate(w, templatePath, structures.Slice_Convs)
 	}
@@ -57,7 +57,7 @@ func handleImageUpload(r *http.Request, username string, nameTable string) (stri
 	CHEMIN_IMG := "static/images/forum/" + nameTable
 	date := time.Now()
 	currenttime := date.Format("02-01-2006")
-	timeStr := date.Format("15:04")
+	timeStr := date.Format("1504")
 
 	// Créer le répertoire pour les forums si nécessaire
 	if _, err := os.Stat(CHEMIN_IMG); os.IsNotExist(err) {
@@ -99,13 +99,13 @@ func handleImageUpload(r *http.Request, username string, nameTable string) (stri
 func getCurrentDateTime() string {
 	currentTime := time.Now()
 	date := currentTime.Format("02/01/2006")
-	timeStr := currentTime.Format("15:04")
+	timeStr := currentTime.Format("1504")
 	return date + " à " + timeStr
 }
 
 // displayForumMessages récupère et affiche tous les messages du forum
 func displayForumMessages(db *sql.DB) {
-	structures.Conversation_game_var, structures.Slice_Convs = SearchIntoTables.AllIntoGame(db, "GameLeagueOfLegends", structures.Conversation_game_var, structures.Slice_Convs)
+	structures.Conversation_game_var, structures.Slice_Convs = SearchIntoTables.AllIntoForum(db, structures.Conversation_game_var, structures.Slice_Convs)
 	// Inverser l'ordre des messages avant de les afficher
 	structures.Slice_Convs = reverseMessages(structures.Slice_Convs)
 	// Afficher le template avec les messages du forum

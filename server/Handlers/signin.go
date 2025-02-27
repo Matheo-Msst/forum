@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fauxrome/mysql/ConnectAndDisconnect"
 	"fauxrome/mysql/insert"
 	SearchIntoTables "fauxrome/mysql/search"
 	structures "fauxrome/server/Structures"
@@ -13,13 +14,13 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-		db := MysqlConf()
+		db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 
 		nameTableUser := "Utilisateur"
 
 		user := structures.Simple_Utilisateurs_Search
 		users := structures.Slice_Utilisateurs_Search
-		user, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, nameTableUser, user, users)
+		user, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, user, users)
 		structures.Simple_Utilisateurs_Search = user
 		if user.Utilisateur == username {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)

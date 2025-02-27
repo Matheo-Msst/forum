@@ -10,8 +10,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func SearchByUserIntoProfil(db *sql.DB, utilisateurRecherche string, nameTable string, u structures.Profil_Search, Profils []structures.Profil_Search) (structures.Profil_Search, []structures.Profil_Search) {
-
+func SearchByUserIntoProfil(db *sql.DB, utilisateurRecherche string, u structures.Profil_Search, Profils []structures.Profil_Search) (structures.Profil_Search, []structures.Profil_Search) {
+	nameTable := structures.Tbl.Profil
 	query := "SELECT ID, Utilisateur, Prenom, Nom, Age, Email, PhotoProfil, Description FROM " + nameTable + " WHERE Utilisateur = ?"
 
 	stmt, err := db.Prepare(query)
@@ -37,8 +37,8 @@ func SearchByUserIntoProfil(db *sql.DB, utilisateurRecherche string, nameTable s
 	return u, Profils
 }
 
-func AllIntoProfil(db *sql.DB, nameTable string) {
-
+func AllIntoProfil(db *sql.DB) {
+	nameTable := structures.Tbl.Profil
 	query := "SELECT ID, Utilisateur, Prenom, Nom, Age, Email, PhotoProfil, Description FROM " + nameTable
 
 	rows, err := db.Query(query)

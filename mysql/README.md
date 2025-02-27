@@ -1,5 +1,3 @@
-# Game à dit oui !  (GaMaDyWi)
-> Il ne s'est pas coder en un jour (ref à la ville de Rome)
 # Pour lancer le projet :
 
 ## Prérequis :

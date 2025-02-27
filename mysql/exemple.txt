@@ -1,0 +1,71 @@
+--------------------------------------------------
+EXEMPLE POUR LES BDD DES UTILISATEURS :
+Table : Users
+
+ID  |  UTILISATEUR  |  PASSWORD | ROLE  |
+----------------------------------------|
+1   | MATHEO        | 1234      | USER  |
+2   | DYLAN         | 3546      | ADMIN |
+
+
+--------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------
+POUR STOQUER LES MESSAGES DES CONV :
+
+Table : League Of Legends
+
+ID  |  UTILISATEUR | MESSAGE      | IMAGES                   | DATE               |
+----------------------------------------------------------------------------------|
+1   |  WILLIAM     | Bonjour !    | /static/images/test.png  | 17/02/2025 à 15h16 |
+2   |  GABI        | Salut à toi !|                          | 17/02/2025 à 17h20 |
+
+--------------------------------------------------
+--------------------------------------------------
+POUR STOQUER LES MESSAGES DES CONV :
+
+Table : Valorant
+
+ID  |  UTILISATEUR | MESSAGE      | IMAGES                   | DATE               |
+----------------------------------------------------------------------------------|
+1   |  WILLIAM     | Bonjour !    | /static/images/test.png  | 17/02/2025 à 15h16 |
+2   |  GABI        | Salut à toi !|                          | 17/02/2025 à 17h20 |
+
+--------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------
+POUR STOQUER LES PROFIL :
+
+Table : Profils
+
+ID  |  UTILISATEUR   | Prenom      | Nom             | Age     | Email                    | PhotoProfil               | Description       |
+------------------------------------------------------------------------------------------------------------------------------------------|
+1   |  WILLIAM_154   | William     | Krommer         | 18      | william.krommer@ynov.com | /static/images/test.png   | Je suis william ! |
+1   |  matheo1608    | matheo      | maussant        | 20      | matheo.maussant@ynov.com | /static/images/defaut.png | Je suis matheo !  |
+
+
+--------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------
+POUR LES BANNISSEMENTS :
+
+Table : Bannissements
+
+ID  |  UTILISATEUR   | Cause      | Date_Bannissement  | PhotoProfil               |
+-----------------------------------------------------------------------------------|
+1   |  WILLIAM_154   | William    | 17/02/2025 à 15h16 | /static/images/test.png   |
+2   |  Gabush-456    | Gabriel    | 17/02/2025 à 15h16 | /static/images/test.png   |
+
+--------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------
+POUR LES jeux :
+
+Table : Jeux-Profil
+
+ID  |  NomDuJeu           | ImageJeu                        | Description  | Types                    |
+------------------------------------------------------------------------------------------------------|
+1   |  Fortnite           | /static/images/jeux/jeu1.png    | thsrbbsbb    | coop/solo/battleroyale   |
+2   |  LragueOfLegends    | /static/images/jeux/jeu1.png    | grqsbvrbr    | coop/solo/comp           |
+
+--------------------------------------------------

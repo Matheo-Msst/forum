@@ -2,11 +2,16 @@ package ConnectAndDisconnect
 
 import (
 	"database/sql"
+	structures "fauxrome/server/Structures"
 	"fmt"
 	"log"
 )
 
-func ConnectToBDD_Mysql(user_BDD string, password_BDD string, dbName string) (*sql.DB, error) {
+func ConnectToBDD_Mysql() (*sql.DB, error) {
+	user_BDD := structures.DB.UserName
+	password_BDD := structures.DB.PassWD
+	dbName := structures.DB.DatabaseName
+
 	dsn := user_BDD + ":" + password_BDD + "@tcp(127.0.0.1)/" + dbName
 
 	db, err := sql.Open("mysql", dsn)

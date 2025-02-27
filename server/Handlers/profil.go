@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fauxrome/mysql/ConnectAndDisconnect"
 	SearchIntoTables "fauxrome/mysql/search"
 	"fauxrome/mysql/update"
 	structures "fauxrome/server/Structures"
@@ -10,13 +11,12 @@ import (
 )
 
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
-	db := MysqlConf()
+	db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 	username := structures.User_Connected
 	fmt.Println(username)
-	nameTableProfil := "Profil"
 	var profil structures.Profil_Search
 	var profils []structures.Profil_Search
-	profil, _ = SearchIntoTables.SearchByUserIntoProfil(db, username, nameTableProfil, profil, profils)
+	profil, _ = SearchIntoTables.SearchByUserIntoProfil(db, username, profil, profils)
 
 	if r.Method == http.MethodPost {
 		modif := r.FormValue("modif")
@@ -39,7 +39,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = update.UpdateProfil(db, username, firstname, lastname, age, email, photoProfil, description, nameTableProfil)
+		err = update.UpdateProfil(db, username, firstname, lastname, age, email, photoProfil, description)
 		if err != nil {
 			http.Error(w, "Erreur lors de la mise à jour du profil", http.StatusInternalServerError)
 			return

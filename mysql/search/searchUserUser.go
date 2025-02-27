@@ -10,8 +10,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func SearchByUserIntoUser(db *sql.DB, utilisateurRecherche string, nameTable string, u structures.Utilisateur_Search, users []structures.Utilisateur_Search) (structures.Utilisateur_Search, []structures.Utilisateur_Search) {
-
+func SearchByUserIntoUser(db *sql.DB, utilisateurRecherche string, u structures.Utilisateur_Search, users []structures.Utilisateur_Search) (structures.Utilisateur_Search, []structures.Utilisateur_Search) {
+	nameTable := structures.Tbl.User
 	query := "SELECT ID, Utilisateur, MotDePasse, Role FROM " + nameTable + " WHERE Utilisateur = ?"
 
 	stmt, err := db.Prepare(query)
@@ -48,21 +48,4 @@ func DisplaySearchUser(u structures.Utilisateur_Search, users []structures.Utili
 	} else {
 		fmt.Println("Aucun utilisateur trouvé avec ce nom.")
 	}
-}
-func IfNOtPassword(user string, password string, u structures.Utilisateur_Search, users []structures.Utilisateur_Search) bool {
-	// Afficher les résultats récupérés
-	if len(users) > 0 {
-		fmt.Println("Utilisateur trouvé :")
-		for _, u := range users {
-			// Affichage de l'utilisateur avec tous les champs
-			fmt.Printf("ID: %d, Utilisateur: %s, MotDePasse: %s, Role: %s\n",
-				u.ID, u.Utilisateur, u.MotDePasse, u.Role)
-		}
-	} else {
-		fmt.Println("Aucun utilisateur trouvé avec ce nom.")
-	}
-	if u.MotDePasse != password && u.Utilisateur != user {
-		return true
-	}
-	return false
 }

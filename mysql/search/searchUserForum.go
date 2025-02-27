@@ -10,8 +10,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func SearchByUserIntoGame(db *sql.DB, utilisateurRecherche string, nameTable string) {
-
+func SearchByUserIntoForum(db *sql.DB, utilisateurRecherche string) {
+	nameTable := structures.Tbl.Forum
 	query := "SELECT ID, Utilisateur, Message, Image , Date FROM " + nameTable + " WHERE Utilisateur = ?"
 
 	stmt, err := db.Prepare(query)
@@ -36,21 +36,21 @@ func SearchByUserIntoGame(db *sql.DB, utilisateurRecherche string, nameTable str
 		conversations_game = append(conversations_game, u)
 	}
 
-	// Afficher les résultats récupérés
+}
+func DisplayIntoForum(u structures.Conversation_Game, conversations_game []structures.Conversation_Game) {
 	if len(conversations_game) > 0 {
-		fmt.Println("Utilisateur trouvé :")
+		fmt.Println("Conversations trouvées :")
 		for _, u := range conversations_game {
-			// Affichage de l'utilisateur avec tous les champs
-			fmt.Printf("ID: %d, Utilisateur: %s, Message: %s, Image: %s , Date: %s \n",
+			fmt.Printf("ID: %d\n Utilisateur: %s\n Message: %s\n Image: %s\n Date: %s \n\n",
 				u.ID, u.Utilisateur, u.Message, u.Image, u.Date)
 		}
 	} else {
-		fmt.Println("Aucun utilisateur trouvé avec ce nom.")
+		fmt.Println("Aucune conversation trouvée dans la table.")
 	}
-
 }
 
-func AllIntoGame(db *sql.DB, nameTable string, u structures.Conversation_Game, conversations_game []structures.Conversation_Game) (structures.Conversation_Game, []structures.Conversation_Game) {
+func AllIntoForum(db *sql.DB, u structures.Conversation_Game, conversations_game []structures.Conversation_Game) (structures.Conversation_Game, []structures.Conversation_Game) {
+	nameTable := structures.Tbl.Forum
 	query := "SELECT ID, Utilisateur, Message, Image, Date FROM " + nameTable + " ORDER BY ID DESC"
 
 	rows, err := db.Query(query)
@@ -71,16 +71,4 @@ func AllIntoGame(db *sql.DB, nameTable string, u structures.Conversation_Game, c
 	}
 
 	return u, conversations_game
-}
-
-func DisplayIntoAllGame(u structures.Conversation_Game, conversations_game []structures.Conversation_Game) {
-	if len(conversations_game) > 0 {
-		fmt.Println("Conversations trouvées :")
-		for _, u := range conversations_game {
-			fmt.Printf("ID: %d\n Utilisateur: %s\n Message: %s\n Image: %s\n Date: %s \n\n",
-				u.ID, u.Utilisateur, u.Message, u.Image, u.Date)
-		}
-	} else {
-		fmt.Println("Aucune conversation trouvée dans la table.")
-	}
 }

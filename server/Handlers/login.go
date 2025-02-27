@@ -1,14 +1,12 @@
 package server
 
 import (
-	"database/sql"
 	"fauxrome/mysql/ConnectAndDisconnect"
 	SearchIntoTables "fauxrome/mysql/search"
 	structures "fauxrome/server/Structures"
 	Roles "fauxrome/server/roles"
 
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -37,13 +35,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Connexion à la base de données
-		db := MysqlConf()
-
-		// Table Utilisateur
-		nameTableUser := "Utilisateur"
+		db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 
 		// Recherche de l'utilisateur dans la base de données via l'utilisateur
-		structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, nameTableUser, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
+		structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
 
 		// Affichage des informations de l'utilisateur pour le débogage
 		fmt.Println("Nom d'utilisateur:", username)
@@ -51,7 +46,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		SearchIntoTables.DisplaySearchUser(structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
 
 		// Vérification du mot de passe de l'utilisateur
-		if SearchIntoTables.IfNOtPassword(username, password, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search) {
+		if IfNOtPassword(username, password, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search) {
 			// Si le mot de passe est incorrect, afficher le formulaire de connexion
 			AfficherTemplate(w, "login", nil)
 		} else {
@@ -72,18 +67,24 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func MysqlConf() *sql.DB {
-	userDB := "AdminSupreme"     // Utilisateur mysql à creer
-	PassWD := "AdminSupreme123!" // Mot de passe mysql a definir pour l'utilisateur
-	dbName := "Database_Forum"   // Base de donnée à créer au préalable
-
-	// Connexion à la base de données
-	db, err := ConnectAndDisconnect.ConnectToBDD_Mysql(userDB, PassWD, dbName)
-	if err != nil {
-		log.Fatalf("Erreur: %v", err)
+func IfNOtPassword(user string, password string, u structures.Utilisateur_Search, users []structures.Utilisateur_Search) bool {
+	// Afficher les résultats récupérés
+	if len(users) > 0 {
+		fmt.Println("Utilisateur trouvé :")
+		for _, u := range users {
+			// Affichage de l'utilisateur avec tous les champs
+			fmt.Printf("ID: %d, Utilisateur: %s, MotDePasse: %s, Role: %s\n",
+				u.ID, u.Utilisateur, u.MotDePasse, u.Role)
+		}
+	} else {
+		fmt.Println("Aucun utilisateur trouvé avec ce nom.")
 	}
-	return db
+	if u.MotDePasse != password && u.Utilisateur != user {
+		return true
+	}
+	return false
 }
+
 func AfficherTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	// Obtenir le chemin absolu du répertoire de travail actuel
 	cwd, err := os.Getwd()

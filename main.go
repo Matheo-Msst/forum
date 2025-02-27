@@ -4,30 +4,38 @@ import (
 	"fauxrome/mysql/ConnectAndDisconnect"
 	"fauxrome/mysql/CreateAndDelete"
 	server "fauxrome/server/Handlers"
+	structures "fauxrome/server/Structures"
 
 	"fmt"
 	"log"
 	"net/http"
 )
 
+func NameTableForum(nameTableGame string) string {
+	nameTableGame = "Game" + nameTableGame
+	return nameTableGame
+}
+
 const port = ":1678"
 
 func main() {
-	userDB := "AdminSupreme"     // Utilisateur mysql à creer
-	PassWD := "AdminSupreme123!" // Mot de passe mysql a definir pour l'utilisateur
-	dbName := "Database_Forum"   // Base de donnée à créer au préalable
+	structures.DB.UserName = "AdminSupreme"       // Utilisateur mysql à creer
+	structures.DB.PassWD = "AdminSupreme123!"     // Mot de passe mysql a definir pour l'utilisateur
+	structures.DB.DatabaseName = "Database_Forum" // Base de donnée à créer au préalable
 
-	db, err := ConnectAndDisconnect.ConnectToBDD_Mysql(userDB, PassWD, dbName)
+	db, err := ConnectAndDisconnect.ConnectToBDD_Mysql()
 	if err != nil {
 		log.Fatalf("Erreur: %v", err)
 	}
-	CreateAndDelete.CreateDataBase(db, dbName)
+	CreateAndDelete.CreateDataBase(db, structures.DB.DatabaseName)
 
-	nameTableUser := "Utilisateur"
-	nameTableProfil := "Profil"
-	nameTableGame := "GameLeagueOfLegends"
-	nameTableBans := "Bannissement"
-	CreateAndDelete.CreateAllTables(db, nameTableUser, nameTableProfil, nameTableGame, nameTableBans)
+	structures.Tbl.User = "Utilisateur"
+	structures.Tbl.Profil = "Profil"
+	structures.Tbl.Game = "LeagueOfLegends"
+	structures.Tbl.Forum = NameTableForum(structures.Tbl.Game)
+	structures.Tbl.Bans = "Bannissement"
+
+	CreateAndDelete.CreateAllTables(db)
 	// ------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------
