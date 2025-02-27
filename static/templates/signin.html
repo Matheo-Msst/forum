@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignIn</title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(/static/images/space.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Conteneur principal */
+        .container {
+            background-color: rgba(15, 50, 90, 0.762);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Formulaire */
+        form {
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        hr {
+            width: 100%;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .footer-links {
+            text-align: center;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Inscription</h2>
+        
+        <!-- Formulaire d'inscription -->
+        <form method="POST" action="/signin">
+            <input type="text" name="username" placeholder="Nom d'Utilisateur" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">S'INSCRIRE</button>
+        </form>
+        
+        <hr>
+        
+        <div class="footer-links">
+            <p>
+                Vous avez déjà un compte ? <a href="/login">Connectez-vous Ici !</a>
+                <br>
+                <a href="/">RETOUR HOME PAGE</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

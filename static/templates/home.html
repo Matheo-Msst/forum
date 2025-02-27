@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(/static/images/space.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #ffffff;
+        }
+
+        a {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #3094ff;
+        }
+
+        a:hover {
+            background-color: #9aa0a6;
+            color: rgb(25, 25, 25);
+        }
+
+        /* Section avec un fond */
+        .container{
+            background-color: rgba(10, 50, 95, 0.38); 
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            width: 100%;
+            /* border: solid 3px rgb(255, 255, 255); */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/images/logo8.png" width="500"height="250">
+        <p>
+            <a href="/login">SE CONNECTER</a>
+            <p> OU </p>
+            <a href="/signin">S'INSCRIRE</a>
+        </p>
+    </div>
+</body>
+</html>

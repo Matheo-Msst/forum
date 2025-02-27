@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <style>
+        body {
+            background-color: violet;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: yellow;
+        }
+
+        .profil-info {
+            margin-bottom: 20px;
+        }
+
+        .profil-info p {
+            margin: 5px 0;
+        }
+
+        .profil-info img {
+            border-radius: 8px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <h2>Profil</h2>
+
+    <div class="profil-info">
+        <!-- Vérifie si les données du profil sont disponibles et les affiche -->
+        <p><strong>Nom d'Utilisateur :</strong> {{ .Utilisateur }}</p>
+        <p><strong>Prénom :</strong> {{ .Prenom }}</p>
+        <p><strong>Nom :</strong> {{ .Nom }}</p>
+        <p><strong>Âge :</strong> {{ .Age }}</p>
+        <p><strong>Email :</strong> {{ .Email }}</p>
+
+        <!-- Vérifie si la photo de profil existe, sinon affiche une image par défaut -->
+        {{ if .PhotoProfil }}
+            <p><img src="{{ .PhotoProfil }}" alt="Image de profil" width="300"></p>
+        {{ else }}
+            <p><em>Aucune photo de profil</em></p>
+        {{ end }}
+
+        <p><strong>Description :</strong> {{ .Description }}</p>
+    </div>
+
+    <!-- Formulaire pour modifier le profil -->
+    <form method="POST" action="/profil">
+        <input type="hidden" name="modif" value="modif">
+        <button type="submit">Modifier le profil</button>
+    </form>
+
+    <a href="/">RETOUR HOME PAGE</a>
+</body>
+</html>

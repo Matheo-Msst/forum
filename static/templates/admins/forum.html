@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMINS</title>
+    <style>
+        body{
+            background-color: rgb(115, 57, 48);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+            font-size: large;
+
+        }
+        a {
+            color: wheat;
+            font-size: xx-large;
+        }
+        #upload-image-container {
+            cursor: pointer;
+            display: inline-block;
+        }
+        #image-upload {
+            display: none;
+        }
+        .scrollable-container {
+            width: 70%;
+            height: 65%; /* Hauteur fixe pour activer le défilement */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 2%;
+            background-color: #f9f9f9;
+            border: solid 3px rgb(67, 5, 5);
+        }
+        .content {
+            width: 100%;
+
+        }
+        .content p {
+            margin: 0;
+            padding: 2%;
+            gap:10%;
+        }
+        li {
+            list-style-type: none;
+        }
+        .Envoie{
+            display: flex;
+            justify-content: center; /* Assure que les éléments sont espacés correctement */
+            align-items: center;  /* Centre verticalement les éléments */
+            width: 70%;
+            height: auto;
+            padding: 1%;
+            margin: 0;
+            /* border: solid 5px rgb(145, 255, 0); */
+        }
+        .Envoie form{
+            width: 100%;
+        }
+        .ligne{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: auto;
+            flex-direction: row;
+            /* border: solid 5px blue; */
+        }
+        .ligne input{
+            width: 70%;
+            /* border: solid 5px rgb(255, 0, 81); */
+        }
+
+        .ligne input , .ligne img{
+            height: 50px;
+        }
+        .ImageEnvoie{            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 15%;
+            gap:5%;
+            height: auto;
+            flex-direction: row;
+            
+        }
+        .message-user {
+            display: flex;
+            justify-content: center;
+            background-color: gray; /* Fond gris pour l'utilisateur connecté */
+            padding: 10px;
+            width: 40%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            flex-direction: column;
+            margin-left: auto; /* Alignement à droite */
+            text-align: center;
+        }
+
+        .message-user img {
+            align-self: center;
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            margin-top: 10px;
+            padding: 1%;
+        }
+
+        .message-other {
+            display: flex;
+            justify-content: center;
+            background-color: lightblue; /* Fond bleu clair pour les autres utilisateurs */
+            padding: 10px;
+            width: 40%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            flex-direction: column;
+            text-align: center;
+            margin-right: auto; /* Alignement à gauche */
+        }
+
+        .message-other img {
+            align-self: center;
+            margin-top: 10px;
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            padding: 1%;
+        }
+
+        /* Ajout du même style pour la section Users-Convs et Date-Convs des messages */
+        .message-other .Users-Convs, .message-other .Date-Convs {
+            width: 100%;
+            background-color: rgb(35, 85, 102); /* Fond pour Users-Convs */
+            padding: 5px 0;
+            color:wheat;
+        }
+        .message-other,.message-other .Users-Convs ,.message-user, .message-user .Users-Convs{
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .message-user .Users-Convs, .message-user .Date-Convs {
+            width: 100%;
+            background-color: rgb(71, 71, 71); /* Fond pour Date-Convs */
+            padding: 5px 0;
+            color:wheat;
+        }
+        .message-other,.message-other .Date-Convs ,.message-user, .message-user .Date-Convs{
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="/">RETOUR HOME PAGE</a>
+    <br>
+    <a href="/profil">Profil</a>
+    
+    <h2>Messages du Forum</h2>
+    <div class="scrollable-container">
+        <div class="content">
+            <ul>
+                {{range .}}
+                    <li>
+                        {{if eq .Utilisateur .Utilisateur_Connected}}
+                            <!-- Message de l'utilisateur connecté -->
+                            <div class="message-user">
+                                <div class="Users-Convs">
+                                    <strong>{{.Utilisateur}}</strong> <br>
+                                </div>
+                                <strong>{{.Message}}</strong>  <br>
+                                {{if .Image}}
+                                    <img src="{{.Image}}" alt="Image" width="300"><br>
+                                {{else}}
+                                    <p></p>
+                                {{end}}
+                                <div class="Date-Convs">
+                                    <strong>{{.Date}}</strong> 
+                                </div>
+                            </div>
+                        {{else}}
+                            <!-- Message d'un autre utilisateur -->
+                            <div class="message-other">
+                                <div class="Users-Convs">
+                                    <strong>{{.Utilisateur}}</strong> <br>
+                                </div>
+                                <strong>{{.Message}}</strong>  <br>
+                                {{if .Image}}
+                                    <img src="{{.Image}}" alt="Image" width="300"><br>
+                                {{else}}
+                                    <p></p>
+                                {{end}}
+                                <div class="Date-Convs">
+                                    <strong>{{.Date}}</strong> 
+                                </div>
+                            </div>
+                        {{end}}
+                    </li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+
+    <div class="Envoie">
+        <form method="POST" action="/forum" enctype="multipart/form-data" id="forum-form">
+            <div class="ligne">
+                <input type="text" name="message" placeholder="Message ici!" required><br><br>
+                <div class="ImageEnvoie">
+                    <div id="upload-image-container">
+                        <img src="/static/images/icons/image.png" alt="Cliquez ici pour ajouter une image" width="50" height="50" />
+                    </div>
+                    <input type="file" name="image" id="image-upload" accept="image/*"><br><br>
+                    <img src="/static/images/icons/envoie.png" width="50" height="50" style="cursor: pointer;" id="submit-button">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        // Javascript pour remplacer l'input par une image à des fins esthétiques 
+        document.getElementById('upload-image-container').addEventListener('click', function() {
+            document.getElementById('image-upload').click();
+        });
+
+        // Soumettre le formulaire lorsque l'image (bouton de soumission) est cliquée
+        document.getElementById('submit-button').addEventListener('click', function() {
+            document.getElementById('forum-form').submit();
+        });
+
+        // Fonction pour scroller la div au bas lorsque la page est chargée
+        window.onload = function() {
+            var scrollableDiv = document.querySelector('.scrollable-container');
+            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;  // Fait défiler la div vers le bas
+        };
+
+        // Fonction pour ajouter un nouveau message et scroller vers le bas
+        function addMessage() {
+            var scrollableDiv = document.querySelector('.scrollable-container');
+            setTimeout(function() {
+                scrollableDiv.scrollTop = scrollableDiv.scrollHeight;  // Fait défiler vers le bas après ajout du message
+            }, 100);
+        }
+    </script>
+</body>
+</html>

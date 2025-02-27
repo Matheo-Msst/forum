@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUESTS</title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(/static/images/amongus.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        a {
+            color: #ffffff;
+            font-size: 1.2em;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(15, 50, 90, 0.8), rgba(25, 65, 102, 0.8));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Conteneur défilant */
+        .scrollable-container {
+            width: 90%;
+            max-width: 800px;
+            height: 60vh;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            background-color: rgba(15, 50, 90, 0.5);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .content ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .content li {
+            margin-bottom: 20px;
+        }
+
+        /* Styles des messages */
+        .message-other, .message-user {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .message-other:hover, .message-user:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .message-other .Users-Convs, .message-user .Users-Convs {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(15, 50, 90, 0.8), rgba(25, 65, 102, 0.8));
+            color: #ffffff;
+            padding: 10px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .message-other .Date-Convs, .message-user .Date-Convs {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(15, 50, 90, 0.8), rgba(25, 65, 102, 0.8));
+            color: #ffffff;
+            padding: 10px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .message-other strong, .message-user strong {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #ffffff;
+        }
+
+        .message-other img, .message-user img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Section d'envoi */
+        .Envoie {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .Envoie form {
+            width: 100%;
+        }
+
+        .liens {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .liens a {
+            background: linear-gradient(135deg, rgba(15, 50, 90, 0.8), rgba(25, 65, 102, 0.8));
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .liens a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        hr {
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+        }
+
+        /* Responsivité */
+        @media (max-width: 768px) {
+            .scrollable-container {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .Envoie {
+                width: 100%;
+            }
+
+            .message-other, .message-user {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Messages du Forum</h2>
+    <div class="scrollable-container">
+        <div class="content">
+            <ul>
+                {{range .}}
+                    <li>
+                        <div class="message-other">
+                            <div class="Users-Convs">
+                                <strong>{{.Utilisateur}}</strong> <br>
+                            </div>
+                            <strong>{{.Message}}</strong>  <br>
+                            {{if .Image}}
+                                <img src="{{.Image}}" alt="Image" width="300"><br>
+                            {{else}}
+                                <p></p>
+                            {{end}}
+                            <div class="Date-Convs">
+                                <strong>{{.Date}}</strong> 
+                            </div>
+                        </div>
+                    </li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+    <div class="Envoie">
+        <form method="POST" action="/forum" enctype="multipart/form-data" id="forum-form">
+            <div class="liens">
+                <a href="/login">CONNECTEZ-VOUS POUR ENVOYER DES MESSAGES !</a>
+                <hr>
+                <a href="/">RETOUR HOME PAGE</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
