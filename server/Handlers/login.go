@@ -22,9 +22,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		// Récupérer les valeurs du formulaire
 		username := r.FormValue("username")
 		password := r.FormValue("password")
-		structures.User_Connected = username
+
 		// Si l'utilisateur se connecte en tant qu'invité, le nom d'utilisateur et le mot de passe seront "guest"
 		if username == "guest" && password == "guest" {
+			structures.User_Connected = username
 			structures.Role_ConnectedUser = u.Role
 			role := structures.Role_ConnectedUser
 			path := Roles.IfRole(role)
@@ -32,10 +33,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Connexion en tant qu'invité, chemin :", role)
 
 			// Rediriger vers le forum en tant qu'invité
-			http.Redirect(w, r, "/forum", http.StatusSeeOther)
+			http.Redirect(w, r, "/games", http.StatusSeeOther)
 			return
 		}
-
+		structures.User_Connected = username
 		// Connexion à la base de données
 		db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 
@@ -49,16 +50,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("Nom d'utilisateur:", structures.User_Connected)
 		fmt.Println("Mot de passe:", password)
-		SearchIntoTables.DisplaySearchUser(structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
 
 		if IfNOtPassword(structures.User_Connected, password, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search) {
 			AfficherTemplate(w, "login", nil)
 		} else {
-			structures.User_Connected = structures.Simple_Utilisateurs_Search.Utilisateur
 			role := structures.Simple_Utilisateurs_Search.Role
 			structures.Role_ConnectedUser = Roles.IfRole(role)
-
-			http.Redirect(w, r, "/forum", http.StatusSeeOther)
+			fmt.Println(structures.Role_ConnectedUser)
+			http.Redirect(w, r, "/games", http.StatusSeeOther)
 		}
 	} else {
 		AfficherTemplate(w, "login", nil)

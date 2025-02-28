@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste de jeux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/images/blue.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Ajuste le contenu vers le haut */
+            align-items: center; /* Permet d'aligner le contenu tout en haut */
+            height: auto; /* Modifie la hauteur pour permettre le défilement */
+            min-height: 100vh; /* Assure que le corps prend au moins toute la hauteur de l'écran */
+            flex-direction: column;
+            text-align: center;
+            overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+        }
+
+        .container {
+            background-color: rgba(10, 50, 95, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+            margin-top: 20px; /* Ajoute un petit espace en haut */
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        .game-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Affiche un jeu par ligne */
+            gap: 20px; /* Espace entre les éléments */
+        }
+
+        .game-item {
+            display: flex;
+            align-items: center; /* Aligne l'image et les informations horizontalement */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-align: left; /* Aligne le texte à gauche */
+            width: 100%; /* Prend toute la largeur du conteneur */
+        }
+
+        .game-item img {
+            border-radius: 8px;
+            width: 40%; /* Augmente la largeur de l'image pour la rendre plus grande */
+            height: auto;
+            margin-right: 20px; /* Espace entre l'image et les infos du jeu */
+        }
+
+        .game-info {
+            flex: 1;
+        }
+
+        .game-info strong {
+            font-size: xx-large;
+            color: #0a3260;
+        }
+
+        .game-info p {
+            color: #333;
+            font-size: x-large;
+        }
+
+        a {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #3094ff;
+        }
+
+        a:hover {
+            background-color: #9aa0a6;
+            color: rgb(25, 25, 25);
+        }
+
+        form{
+            width: 100%;
+            height: auto;
+        }
+
+        button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            padding: 2%;
+            width: 100%;
+            height: auto;
+            background-color: rgba(254, 202, 59, 0.596);
+            margin-left: -1.25%;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des jeux</h1>
+        <ul class="game-list">
+            {{range .}}
+            <li class="game-item">
+                <form method="POST" action="/games">
+                    <input type="hidden" name="{{.NomJeu}}" value="{{.NomJeu}}">
+                    <button type="submit">
+                        {{if .ImageJeu}}
+                        <img src="{{.ImageJeu}}" alt="Image de {{.NomJeu}}">
+                        {{else}}
+                        <p>No image available</p>
+                        {{end}}
+                        <div class="game-info">
+                            <strong>{{.NomJeu}}</strong>
+                            <p><em>{{.Types}}</em></p>
+                            <p>{{.Description}}</p>
+                        </div>
+                    </button>
+                </form>
+            </li>
+            {{end}}
+        </ul>
+        <a href="/">Retour à l'accueil</a>
+    </div>
+</body>
+</html>

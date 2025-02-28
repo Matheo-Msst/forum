@@ -2,6 +2,7 @@ package CreateAndDelete
 
 import (
 	"database/sql"
+	SearchIntoTables "fauxrome/mysql/search"
 	structures "fauxrome/server/Structures"
 	"fmt"
 	"log"
@@ -30,18 +31,32 @@ func CreateTable(db *sql.DB, query string, nameTable string) {
 	}
 }
 
+func NameTableForum(nameTableGame string) string {
+	nameTableGame = "Game_" + nameTableGame
+	return nameTableGame
+}
+
 // ---------------------------------------------------------
 
 func CreateAllTables(db *sql.DB) {
 	fmt.Println("----------------------------------------------------")
 	CreateTableUser(db, structures.Tbl.User)
 	CreateTableProfil(db, structures.Tbl.Profil)
-	CreateTableForum(db, structures.Tbl.Forum)
 	CreateTableGame(db, structures.Tbl.Game)
 	CreateTableBans(db, structures.Tbl.Bans)
+	SearchIntoTables.AllIntoGames(db)
+	// Boucle pour parcourir Slice_Games
+	for i := 0; i < len(structures.Slice_Games); i++ {
+		game := structures.Slice_Games[i]
+		fmt.Println("Nom du jeu:", game.NomJeu)
+		gameTable := NameTableForum(game.NomJeu)
+		CreateTableForum(db, gameTable)
+		structures.NamesTables = append(structures.NamesTables, gameTable)
+	}
+	fmt.Println("----------------------------------------------------")
+	fmt.Println(structures.NamesTables)
 	fmt.Println("----------------------------------------------------")
 }
-
 func CreateTableBans(db *sql.DB, nameTable string) {
 	query := "CREATE TABLE IF NOT EXISTS `" + nameTable + "` (" +
 		"`ID` INT NOT NULL AUTO_INCREMENT, " +

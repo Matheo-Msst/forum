@@ -1,12 +1,18 @@
 package server
 
 import (
+	setupdefault "fauxrome/mysql/setup_default"
+	structures "fauxrome/server/Structures"
+	Roles "fauxrome/server/roles"
 	"fmt"
 	"net/http"
 	"text/template"
 )
 
 func AccueilHandler(w http.ResponseWriter, r *http.Request) {
+	u := setupdefault.SetupDefaultUser(structures.Simple_Utilisateurs_Search)
+	structures.Role_ConnectedUser = u.Role
+	structures.Role_ConnectedUser = Roles.IfRole(structures.Role_ConnectedUser)
 	// Charger le template
 	templateAcc := "./static/templates/home.html"
 	t, err := template.ParseFiles(templateAcc)

@@ -54,6 +54,8 @@ type Games_Search struct {
 	Types       string
 }
 
+var NamesTables []string
+
 // ---------------------------------------------------
 
 var Simple_Profil Profil

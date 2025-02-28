@@ -11,11 +11,6 @@ import (
 	"net/http"
 )
 
-func NameTableForum(nameTableGame string) string {
-	nameTableGame = "Game" + nameTableGame
-	return nameTableGame
-}
-
 const port = ":1678"
 
 func main() {
@@ -43,9 +38,9 @@ func main() {
 
 	// Routes du serveur
 	http.HandleFunc("/", server.AccueilHandler)
+	http.HandleFunc("/games", server.GamesHandler)
 	http.HandleFunc("/signin", server.SigninHandler)
 	http.HandleFunc("/login", server.LoginHandler)
-	http.HandleFunc("/forum_games", server.GamesHundler)
 	http.HandleFunc("/forum", server.ForumHandler)
 	http.HandleFunc("/profil", server.ProfilHandler)
 
