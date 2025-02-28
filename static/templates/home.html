@@ -33,6 +33,8 @@
         }
 
         a {
+            width: 8%;
+            height: auto;
             color: #ffffff;
             font-weight: bold;
             text-decoration: none;
@@ -61,16 +63,42 @@
             align-items: center;
             flex-direction: column;
         }
+        .login_signin{
+            /* border: solid 3px #3094ff; */
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: row;
+            width: 100%;
+            height: 10%;
+            gap:3%;
+        }
+        .jeux{
+            border: solid 3px #3094ff;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: row;
+            text-align: center;
+            width: 24.5%;
+            height: 2%;
+            gap:3%;
+        }
+        .jeux:hover{
+            border: solid 3px #9aa0a6;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="/static/images/logo8.png" width="500"height="250">
-        <p>
-            <a href="/login">SE CONNECTER</a>
+        <div class="login_signin">
+            <a href="/login"> CONNEXION </a>
             <p> OU </p>
-            <a href="/signin">S'INSCRIRE</a>
-        </p>
+            <a href="/signin">INSCRIPTION</a>
+        </div>
+        <a class="jeux" href="/forum_games">Voir les jeux</a>
+        
     </div>
 </body>
 </html>

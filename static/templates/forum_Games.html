@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste de jeux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/images/blue.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(10, 50, 95, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #ffffff;
+        }
+        .game-list {
+            list-style: none;
+            padding: 0;
+        }
+        .game-item {
+            background-color: rgba(254, 202, 59, 0.596);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .game-item img {
+            border-radius: 8px;
+            width: 300px;
+            height: auto;
+        }
+        .game-info {
+            flex: 1;
+        }
+        .game-info strong {
+            font-size: xx-large;
+            color: #0a3260;
+        }
+        .game-info p {
+            color: #333;
+            font-size: x-large;
+        }
+        /* Styles for the link */
+        a {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #3094ff;
+        }
+
+        a:hover {
+            background-color: #9aa0a6;
+            color: rgb(25, 25, 25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des jeux</h1>
+        <ul class="game-list">
+            {{range .}}
+                <li class="game-item">
+                    {{if .ImageJeu}}
+                        <img src="{{.ImageJeu}}" alt="Image">
+                    {{else}}
+                        <p>No image available</p>
+                    {{end}}
+                    <div class="game-info">
+                        <strong>{{.NomJeu}}</strong>
+                        <p><em>{{.Types}}</em></p>
+                        <p>{{.Description}}</p>
+                    </div>
+                </li>
+            {{end}}
+        </ul>
+        <a href="/">Retour Home</a>
+    </div>
+</body>
+</html>

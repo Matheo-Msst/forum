@@ -12,8 +12,9 @@ import (
 
 func SearchByUserIntoForum(db *sql.DB, utilisateurRecherche string) {
 	nameTable := structures.Tbl.Forum
-	query := "SELECT ID, Utilisateur, Message, Image , Date FROM " + nameTable + " WHERE Utilisateur = ?"
+	var u structures.Conversation_Game_Search
 
+	query := "SELECT ID, Utilisateur, Message, Image , Date FROM " + nameTable + " WHERE Utilisateur = ?"
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
@@ -26,14 +27,17 @@ func SearchByUserIntoForum(db *sql.DB, utilisateurRecherche string) {
 	}
 	defer rows.Close()
 
-	// Creer un tableau de Games
-	var conversations_game []structures.Conversation_Game_Search
 	for rows.Next() {
-		var u structures.Conversation_Game_Search
 		if err := rows.Scan(&u.ID, &u.Utilisateur, &u.Message, &u.Image, &u.Date); err != nil {
 			log.Fatal(err)
 		}
-		conversations_game = append(conversations_game, u)
+		// Remplissage de la struct
+		structures.Simple_Convs_Search.ID = u.ID
+		structures.Simple_Convs_Search.Utilisateur = u.Utilisateur
+		structures.Simple_Convs_Search.Message = u.Message
+		structures.Simple_Convs_Search.Date = u.Date
+		// Remplissage de la slice
+		structures.Slice_Convs_Search = append(structures.Slice_Convs_Search, structures.Simple_Convs_Search)
 	}
 
 }
@@ -49,8 +53,9 @@ func DisplayIntoForum(u structures.Conversation_Game, conversations_game []struc
 	}
 }
 
-func AllIntoForum(db *sql.DB, u structures.Conversation_Game, conversations_game []structures.Conversation_Game) (structures.Conversation_Game, []structures.Conversation_Game) {
+func AllIntoForum(db *sql.DB) {
 	nameTable := structures.Tbl.Forum
+	var u structures.Conversation_Game
 	query := "SELECT ID, Utilisateur, Message, Image, Date FROM " + nameTable + " ORDER BY ID DESC"
 
 	rows, err := db.Query(query)
@@ -60,15 +65,20 @@ func AllIntoForum(db *sql.DB, u structures.Conversation_Game, conversations_game
 	defer rows.Close()
 
 	// Vider la slice avant de la remplir (pour éviter la duplication des anciens messages)
-	conversations_game = nil // Vider la slice des messages précédents
+	structures.Slice_Convs = nil // Vider la slice des messages précédents
 
 	for rows.Next() {
 		// Scanner les données dans la struct
 		if err := rows.Scan(&u.ID, &u.Utilisateur, &u.Message, &u.Image, &u.Date); err != nil {
 			log.Fatal(err)
 		}
-		conversations_game = append(conversations_game, u)
+		// Remplissage de la struct
+		structures.Simple_Conv.ID = u.ID
+		structures.Simple_Conv.Utilisateur = u.Utilisateur
+		structures.Simple_Conv.Message = u.Message
+		structures.Simple_Conv.Image = u.Image
+		structures.Simple_Conv.Date = u.Date
+		// Remplissage de la slice
+		structures.Slice_Convs = append(structures.Slice_Convs, structures.Simple_Conv)
 	}
-
-	return u, conversations_game
 }

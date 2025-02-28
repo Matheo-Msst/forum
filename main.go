@@ -31,8 +31,8 @@ func main() {
 
 	structures.Tbl.User = "Utilisateur"
 	structures.Tbl.Profil = "Profil"
-	structures.Tbl.Game = "LeagueOfLegends"
-	structures.Tbl.Forum = NameTableForum(structures.Tbl.Game)
+	structures.Tbl.Game = "Games"
+	structures.Tbl.Forum = "GameLeagueOfLegends"
 	structures.Tbl.Bans = "Bannissement"
 
 	CreateAndDelete.CreateAllTables(db)
@@ -45,6 +45,7 @@ func main() {
 	http.HandleFunc("/", server.AccueilHandler)
 	http.HandleFunc("/signin", server.SigninHandler)
 	http.HandleFunc("/login", server.LoginHandler)
+	http.HandleFunc("/forum_games", server.GamesHundler)
 	http.HandleFunc("/forum", server.ForumHandler)
 	http.HandleFunc("/profil", server.ProfilHandler)
 

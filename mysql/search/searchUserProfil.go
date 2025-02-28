@@ -39,6 +39,7 @@ func SearchByUserIntoProfil(db *sql.DB, utilisateurRecherche string, u structure
 
 func AllIntoProfil(db *sql.DB) {
 	nameTable := structures.Tbl.Profil
+	var u structures.Profil
 	query := "SELECT ID, Utilisateur, Prenom, Nom, Age, Email, PhotoProfil, Description FROM " + nameTable
 
 	rows, err := db.Query(query)
@@ -47,27 +48,27 @@ func AllIntoProfil(db *sql.DB) {
 	}
 	defer rows.Close()
 
-	var Profils []structures.Profil
-
 	for rows.Next() {
-		var u structures.Profil
 
 		if err := rows.Scan(&u.ID, &u.Utilisateur); err != nil {
 			log.Fatal(err)
 		}
-
-		Profils = append(Profils, u)
+		// Remplissage de la struct
+		structures.Simple_Profil.ID = u.ID
+		structures.Simple_Profil.Utilisateur = u.Utilisateur
+		// Remplissage de la slice
+		structures.Slice_Profils = append(structures.Slice_Profils, structures.Simple_Profil)
 	}
 
 }
+
 func DisplaySearchProfil(u structures.Profil_Search, Profils []structures.Profil_Search) {
 	// Vérifier si des données ont été récupérées et les afficher
 	if len(Profils) > 0 {
 		fmt.Println("Conversations trouvées :")
 		for _, u := range Profils {
 			// Affichage de chaque conversation avec tous les champs
-			fmt.Printf("ID: %d\n Utilisateur: %s\n Prenom: %s\n Nom: %s\n Age: %d\n Email: %s\n PhotoProfil: %s\n Description: %s\n\n",
-				u.ID, u.Utilisateur, u.Prenom, u.Nom, u.Age, u.Email, u.PhotoProfil, u.Description)
+			fmt.Printf("ID: %d\n Utilisateur: %s\n Prenom: %s\n Nom: %s\n Age: %d\n Email: %s\n PhotoProfil: %s\n Description: %s\n\n", u.ID, u.Utilisateur, u.Prenom, u.Nom, u.Age, u.Email, u.PhotoProfil, u.Description)
 		}
 	} else {
 		fmt.Println("Aucune conversation trouvée dans la table.")

@@ -4,6 +4,7 @@ import (
 	"fauxrome/mysql/ConnectAndDisconnect"
 	"fauxrome/mysql/insert"
 	SearchIntoTables "fauxrome/mysql/search"
+	setupdefault "fauxrome/mysql/setup_default"
 	structures "fauxrome/server/Structures"
 	Roles "fauxrome/server/roles"
 	"net/http"
@@ -18,21 +19,19 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 
 		nameTableUser := "Utilisateur"
 
-		user := structures.Simple_Utilisateurs_Search
-		users := structures.Slice_Utilisateurs_Search
-		user, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, user, users)
-		structures.Simple_Utilisateurs_Search = user
-		if user.Utilisateur == username {
+		SearchIntoTables.SearchByUserIntoUser(db, username)
+
+		if structures.Simple_Utilisateurs_Search.Utilisateur == username /*deja inscrit*/ || Roles.IfBanned(db, username) == true /*banni*/ {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		} else {
 			insert.InsertUserToUser(db, username, password, nameTableUser)
-			imagePardefautProfil := "/static/images/icons/profil.png"
-			insert.InsertProfilToProfil(db, username, " ", " ", " ", " ", imagePardefautProfil, " ", "Profil")
+			profil := setupdefault.SetupDefaultProfil(structures.Simple_Profil_Search)
+			insert.InsertProfilToProfil(db, username, profil.Prenom, profil.Nom, profil.Age, profil.Email, profil.PhotoProfil, profil.Description, structures.Tbl.Profil)
+			structures.Simple_Profil_Search = profil
 			structures.User_Connected = username
+			structures.Simple_Conv.Utilisateur = username
 			role := "USER"
-			role = Roles.IfRole(role)
-			structures.Role_ConnectedUser = role
-			structures.Conversation_game_var.Utilisateur = username
+			structures.Role_ConnectedUser = Roles.IfRole(role)
 			http.Redirect(w, r, "/forum", http.StatusSeeOther)
 		}
 	} else {

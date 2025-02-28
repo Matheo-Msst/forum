@@ -3,6 +3,7 @@ package server
 import (
 	"fauxrome/mysql/ConnectAndDisconnect"
 	SearchIntoTables "fauxrome/mysql/search"
+	setupdefault "fauxrome/mysql/setup_default"
 	structures "fauxrome/server/Structures"
 	Roles "fauxrome/server/roles"
 
@@ -16,6 +17,7 @@ import (
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	u := setupdefault.SetupDefaultUser(structures.Simple_Utilisateurs_Search)
 	if r.Method == http.MethodPost {
 		// Récupérer les valeurs du formulaire
 		username := r.FormValue("username")
@@ -23,7 +25,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		structures.User_Connected = username
 		// Si l'utilisateur se connecte en tant qu'invité, le nom d'utilisateur et le mot de passe seront "guest"
 		if username == "guest" && password == "guest" {
-			structures.Role_ConnectedUser = "GUEST"
+			structures.Role_ConnectedUser = u.Role
 			role := structures.Role_ConnectedUser
 			path := Roles.IfRole(role)
 			structures.Role_ConnectedUser = path
@@ -37,32 +39,28 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		// Connexion à la base de données
 		db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 
-		// Recherche de l'utilisateur dans la base de données via l'utilisateur
-		structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search = SearchIntoTables.SearchByUserIntoUser(db, username, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
-
-		// Affichage des informations de l'utilisateur pour le débogage
-		fmt.Println("Nom d'utilisateur:", username)
+		SearchIntoTables.SearchByUserIntoUser(db, structures.User_Connected)
+		if Roles.IfBanned(db, username) == true {
+			http.Redirect(w, r, "/home", http.StatusSeeOther)
+			var ban structures.Bans
+			ban = structures.Simple_Bans
+			fmt.Println("L'Utilisateur ", ban.Utilisateur, " à été banni pour : ", ban.Cause, " le ", ban.Date_Bannissement)
+			return
+		}
+		fmt.Println("Nom d'utilisateur:", structures.User_Connected)
 		fmt.Println("Mot de passe:", password)
 		SearchIntoTables.DisplaySearchUser(structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search)
 
-		// Vérification du mot de passe de l'utilisateur
-		if IfNOtPassword(username, password, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search) {
-			// Si le mot de passe est incorrect, afficher le formulaire de connexion
+		if IfNOtPassword(structures.User_Connected, password, structures.Simple_Utilisateurs_Search, structures.Slice_Utilisateurs_Search) {
 			AfficherTemplate(w, "login", nil)
 		} else {
 			structures.User_Connected = structures.Simple_Utilisateurs_Search.Utilisateur
-			test := structures.User_Connected
-			fmt.Println("L'utilsateur (login) est : ", test)
 			role := structures.Simple_Utilisateurs_Search.Role
-			// Déterminer le chemin à suivre pour le rôle
-			path := Roles.IfRole(role)
-			structures.Role_ConnectedUser = path
+			structures.Role_ConnectedUser = Roles.IfRole(role)
 
-			// Rediriger l'utilisateur vers le forum en fonction de son rôle
 			http.Redirect(w, r, "/forum", http.StatusSeeOther)
 		}
 	} else {
-		// Si la méthode est GET, afficher le formulaire de connexion
 		AfficherTemplate(w, "login", nil)
 	}
 }

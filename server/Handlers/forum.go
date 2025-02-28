@@ -22,9 +22,9 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 	db, _ := ConnectAndDisconnect.ConnectToBDD_Mysql()
 	nameTableGame := "GameLeagueOfLegends"
 	username := structures.User_Connected
-	structures.Conversation_game_var.Utilisateur_Connected = username
+	structures.Simple_Conv.Utilisateur_Connected = username
 	fmt.Println("L'utilsateur (forum) est : ", username)
-	fmt.Println("L'utilsateur (forum 2) est : ", structures.Conversation_game_var.Utilisateur_Connected)
+	fmt.Println("L'utilsateur (forum 2) est : ", structures.Simple_Conv.Utilisateur_Connected)
 
 	if r.Method == http.MethodPost {
 
@@ -55,10 +55,7 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 // handleImageUpload traite le téléchargement de l'image
 func handleImageUpload(r *http.Request, username string, nameTable string) (string, error) {
 	CHEMIN_IMG := "static/images/forum/" + nameTable
-	date := time.Now()
-	currenttime := date.Format("02-01-2006")
-	timeStr := date.Format("1504")
-
+	date := getCurrentDateTimeImage()
 	// Créer le répertoire pour les forums si nécessaire
 	if _, err := os.Stat(CHEMIN_IMG); os.IsNotExist(err) {
 		err := os.MkdirAll(CHEMIN_IMG, os.ModePerm)
@@ -66,13 +63,12 @@ func handleImageUpload(r *http.Request, username string, nameTable string) (stri
 			return "", fmt.Errorf("Erreur lors de la création du répertoire: %v", err)
 		}
 	}
-
 	// Vérifier si une image est téléchargée
 	file, _, err := r.FormFile("image")
 	if err == nil {
 		// Si une image est téléchargée, la sauvegarder
 		defer file.Close()
-		imageName := username + "_" + currenttime + "_" + timeStr + ".png"
+		imageName := username + "_" + date + ".png"
 		imagePath := CHEMIN_IMG + "/" + imageName
 		outFile, err := os.Create(imagePath)
 		if err != nil {
@@ -87,32 +83,29 @@ func handleImageUpload(r *http.Request, username string, nameTable string) (stri
 		}
 		return imagePath, nil
 	} else if err != http.ErrMissingFile {
-		// Si l'erreur est autre que "fichier manquant", renvoyer une erreur
+
 		return "", fmt.Errorf("Erreur lors de la récupération du fichier: %v", err)
 	}
 
-	// Retourner une chaîne vide si aucune image n'est téléchargée
 	return "", nil
 }
-
-// getCurrentDateTime retourne la date et l'heure actuelles formatées
 func getCurrentDateTime() string {
+	currentTime := time.Now()
+	date := currentTime.Format("02/01/2006")
+	timeStr := currentTime.Format("15:04")
+	return date + " à " + timeStr
+}
+func getCurrentDateTimeImage() string {
 	currentTime := time.Now()
 	date := currentTime.Format("02/01/2006")
 	timeStr := currentTime.Format("1504")
 	return date + " à " + timeStr
 }
-
-// displayForumMessages récupère et affiche tous les messages du forum
 func displayForumMessages(db *sql.DB) {
-	structures.Conversation_game_var, structures.Slice_Convs = SearchIntoTables.AllIntoForum(db, structures.Conversation_game_var, structures.Slice_Convs)
-	// Inverser l'ordre des messages avant de les afficher
+	SearchIntoTables.AllIntoForum(db)
 	structures.Slice_Convs = reverseMessages(structures.Slice_Convs)
-	// Afficher le template avec les messages du forum
 
 }
-
-// reverseMessages inverse l'ordre des messages dans la conversation
 func reverseMessages(conversations_game []structures.Conversation_Game) []structures.Conversation_Game {
 	for i, j := 0, len(conversations_game)-1; i < j; i, j = i+1, j-1 {
 		conversations_game[i], conversations_game[j] = conversations_game[j], conversations_game[i]
